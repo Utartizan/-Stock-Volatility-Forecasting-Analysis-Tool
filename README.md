@@ -20,13 +20,13 @@ This is a Streamlit app that forecasts stock volatility using a GARCH(1,1) model
    - Clone this repo: `git clone <repo-url>`
    - Navigate to the directory: `cd stock-volatility-forecasting-tool`
    - Install dependencies (see below).
-   - Start the app: `streamlit run app.py`
+   - Start the app: `streamlit run Core.py`
 2. **Inputs**:
    - **Ticker**: Type a stock symbol (e.g., "AAPL" for Apple).
    - **Start Date**: Pick a date (default is Jan 1, 2020).
    - **Forecast Days**: Slide between 1 and 100 days (default is 10).
 3. **Output**:
-   - Check the plot for historical (blue) and forecasted (red dashed) volatility.
+   - Check the plot for historical (blue) and forecasted (red dashed) volatility. (To be fixed)
    - Scroll down for the model summary, diagnostic tests, and volatility metrics.
 
 ## Setup
