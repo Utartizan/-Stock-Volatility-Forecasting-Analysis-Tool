@@ -184,7 +184,10 @@ if price_data is not None:
         st.subheader("Model Summary")
         st.write(garch_fit.summary())
 
-        # Diagnostic tests
+        # Beginning of Diagnostic tests; Perhaps look back into the Econometrics tests to properly integrate testing as
+        # well as improving on the statement of what those tests mean for the stock selected. Maybe select more tests
+        # Maybe refine the GARCH model
+
         st.subheader("GARCH Model Diagnostic Tests")
         resid = garch_fit.resid
         std_resid = resid / garch_fit.conditional_volatility
@@ -216,6 +219,7 @@ if price_data is not None:
 
         X = sign_bias_data[['const', 'neg_shock', 'pos_shock']]
         y = sign_bias_data['std_resid_sq']
+
         sign_bias_model = sm.OLS(y, X).fit()
 
         sign_bias_results = pd.DataFrame({
@@ -225,12 +229,16 @@ if price_data is not None:
         }).round(4)
 
         st.subheader("**Sign Bias Test**")
+
         st.write("The Sign Bias Test checks whether positive and negative stock returns...")
+
         st.table(sign_bias_results)
+
         st.markdown("_Interpretation: Significant coefficients (p < 0.05)...")
 
         # Ljung-Box test
         lb_test = acorr_ljungbox(std_resid, lags=[10], return_df=True)
+
         lb_data = {
             "Metric": ["Test Statistic (lag 10)", "P-value (lag 10)", "Interpretation"],
             "Value": [
@@ -241,11 +249,14 @@ if price_data is not None:
         }
 
         st.subheader("**Ljung-Box Test for Autocorrelation**")
+
         st.write("What it means for stock volatility...")
+
         st.table(pd.DataFrame(lb_data))
 
         # Stability check
         params = garch_fit.params
+
         stability_data = {"Metric": [], "Value": []}
 
         if 'alpha[1]' in params and 'beta[1]' in params:
@@ -255,7 +266,9 @@ if price_data is not None:
                 f"{persistence:.4f}",
                 "Stationary (α + β < 1)" if persistence < 1 else "Non-stationary (α + β ≥ 1)"
             ])
+
         else:
+            
             stability_data["Metric"].append("Result")
             stability_data["Value"].append("Unable to compute persistence.")
 
