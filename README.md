@@ -1,7 +1,7 @@
 # Stock Volatility Forecasting Tool
 ![image](https://i.ibb.co/qLW8VCVN/u-1126137439-3929098091-fm-253-app-138-f-JPEG-1.jpg)
 
-This is a Streamlit app that forecasts stock volatility using a GARCH(1,1) model. It pulls historical stock data from Yahoo Finance, calculates historical volatility, predicts future volatility, and runs diagnostic tests to check the model’s reliability. You’ll get a plot with historical (blue) and forecasted (red dashed) volatility, plus some key metrics and test results.
+This is a Streamlit app that forecasts stock volatility using a GARCH(1, 1) model. It pulls historical stock data from Yahoo Finance, calculates historical volatility, predicts future volatility, and runs diagnostic tests to check the model’s reliability. You’ll get a plot with historical (blue) and forecasted (red dashed) volatility, plus some key metrics and test results.
 
 ## What It Does
 
