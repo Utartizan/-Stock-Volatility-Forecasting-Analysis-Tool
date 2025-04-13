@@ -6,7 +6,8 @@ This is a Streamlit app that forecasts stock volatility using a GARCH(1, 1) mode
 ## What It Does
 
 - **Data Input**: Enter a stock ticker (e.g., "AAPL"), pick a start date, and set a forecast horizon (up to 100 days).
-- **Volatility Plot**: Shows historical volatility (21-day rolling, annualized) and GARCH-forecasted volatility.
+- **Volatility Plot**: Shows historical volatility (21-day rolling, annualised) and GARCH-forecasted volatility.
+- **Volatility Plot**: Shows historical volatility (21-day rolling, annualised) and GARCH-forecasted volatility.
 - **Diagnostics**: Runs four tests to see if the GARCH model fits the stock’s volatility well:
   - **ARCH-LM Test**: Checks for leftover volatility clustering.
   - **Sign Bias Test**: Looks at whether price drops spike volatility more than price gains.
