@@ -9,11 +9,10 @@ from statsmodels.stats.diagnostic import het_arch
 from statsmodels.stats.diagnostic import acorr_ljungbox
 import statsmodels.api as sm
 
-# Main title
+# Main title for Streamlit Site
 st.title("📈 Stock Volatility Forecasting Analysis Tool using GARCH")
 
-
-# Data fetching function
+# Data fetching function from Yahoo Finance library
 @st.cache_data
 def fetch_data(ticker, start_date):
     end_date = datetime.now()
@@ -35,12 +34,12 @@ def fetch_data(ticker, start_date):
         return None
 
 
-# Default values for initial sidebar plot
+# Setting the default values for initial sidebar plot
 default_ticker = "AAPL"
 default_start_date = datetime(2020, 1, 1)
 price_data = fetch_data(default_ticker, default_start_date)
 
-# Sidebar: Input parameters
+# Sidebar: Input parameters for user [user interface]
 st.sidebar.header("⚙️ Input Parameters")
 
 ticker = st.sidebar.text_input("Stock Ticker (e.g., AAPL)", default_ticker).upper()
@@ -49,7 +48,7 @@ startDate = st.sidebar.date_input("Start Date", default_start_date)
 
 forecastDays = st.sidebar.slider("Forecast Days", 1, 100, 10)
 
-# Sidebar: Historical price plot (top)
+# Sidebar: Historical price plot 
 if price_data is not None:
     price_values = price_data.to_numpy().flatten() if price_data.ndim > 1 else price_data.values
 
