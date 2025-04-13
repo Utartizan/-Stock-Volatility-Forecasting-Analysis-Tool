@@ -48,7 +48,7 @@ startDate = st.sidebar.date_input("Start Date", default_start_date)
 
 forecastDays = st.sidebar.slider("Forecast Days", 1, 100, 10)
 
-# Sidebar: Historical price plot 
+# Sidebar: Historical price plot
 if price_data is not None:
     price_values = price_data.to_numpy().flatten() if price_data.ndim > 1 else price_data.values
 
@@ -87,6 +87,14 @@ st.sidebar.write("""
 - View the given plot and metrics on the right.
 """)
 
+st.sidebar.subheader("Acknowledgements")
+
+st.sidebar.write("""
+- Project run by **Ubayd Knight** (Current Final Year Student at the University of Huddersfield)
+- Closer to finding the cure of cancer alone in order to obtain a job in 2025/2026
+- I'd like to thank Maven Securities for the confidence boost.
+""")
+
 # Update price_data with user input
 price_data = fetch_data(ticker, startDate)
 
@@ -120,7 +128,7 @@ if price_data is not None:
         print(f"forecast_dates length: {len(forecast_dates)}")
         print(f"hist_vol shape: {hist_vol.shape}, values: {hist_vol[-5:].values}")
 
-        # Ensure 1D arrays
+        # They have to be one-dimensional arrays for compatibility
         hist_vol_values = hist_vol.to_numpy().flatten() if hist_vol.ndim > 1 else hist_vol.values
         forecast_vol_values = forecast_vol.flatten() if forecast_vol.ndim > 1 else forecast_vol
 
@@ -138,7 +146,7 @@ if price_data is not None:
         })
 
         print(f"hist_df shape: {hist_df.shape}, forecast_df shape: {forecast_df.shape}")
-        vol_df = pd.concat([hist_df, forecast_df], ignore_index=True)
+        vol_df = pd.concat([hist_df, forecast_df], ignore_index=True) #combine both
         print(f"vol_df shape: {vol_df.shape}, unique Types: {vol_df['Type'].unique()}")
 
         # Volatility plot
@@ -148,7 +156,7 @@ if price_data is not None:
             y='Volatility',
             color='Type',
             title=f"Volatility Forecast for {ticker}",
-            color_discrete_map={'Historical': '#1f77b4', 'Forecast': '#ff7f0e'},
+            color_discrete_map={'Historical': '#1f77b4', 'Forecast': '#ff7f0e'}, #why does the forecasted plot not display?
             labels={'Volatility': 'Annualised Volatility (%)', 'Date': 'Date'},
             template='plotly_dark'
         )
