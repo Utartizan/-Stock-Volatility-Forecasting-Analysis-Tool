@@ -39,14 +39,19 @@ def fetch_data(ticker, start_date):
 default_ticker = "MSFT"
 default_start_date = datetime(2022, 1, 1)
 
+
+
 # Sidebar input parameters for user [user interface]
 st.sidebar.header("⚙️ Input Parameters")
 
 ticker = st.sidebar.text_input("Stock Ticker (e.g., AAPL)", default_ticker).upper()
 
+garchType = st.sidebar.selectbox("GARCH Model Type", ["GARCH", "EGARCH", "TGARCH"])
+
 startDate = st.sidebar.date_input("Start Date", default_start_date)
 
 forecastDays = st.sidebar.slider("Forecast Days", 1, 100, 10)
+
 
 price_data = fetch_data(ticker, startDate)
 
@@ -83,6 +88,7 @@ if price_data is not None:
 
 # Sidebar: Instructions
 st.sidebar.subheader("Instructions")
+
 
 st.sidebar.write("""
 - Enter a stock ticker (e.g., 'AAPL' for Apple).
