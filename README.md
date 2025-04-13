@@ -54,3 +54,6 @@ pip install streamlit pandas numpy yfinance arch plotly statsmodels
 ## To-Do List
 1. Fix the GARCH model, ensure it displays on the chart as well as ensuring that the error on the bottom no longer persists.
 2. Buttons on the small stock plot are visible and makes the sidebar look clutter-y, fix that too.
+3. Include multiple GARCH variants (such as EGARCH and TGARCH) for further options, allow users to specify model parameters.
+4. Improve the results and interpretations section. Not a lot of people can be well versed in this sort of stuff. In simple terms what do the following results mean?
+5. Performance metrics? Perhaps include backtest features to compare the forecasts to RMSE, MAE, etc.
