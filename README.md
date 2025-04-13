@@ -18,10 +18,10 @@ This is a Streamlit app that forecasts stock volatility using a GARCH(1, 1) mode
 ## How to Use It
 
 1. **Run the App**:
-   - Clone this repo: `git clone <repo-url>`
-   - Navigate to the directory: `cd stock-volatility-forecasting-tool`
+   - Clone this repo: `git clone <https://github.com/Utartizan/Stock-Volatility-Forecasting-Analysis-Tool/blob/main/README.md>`
+   - Navigate to the directory: `cd QuantStockVolatilityforecast`
    - Install dependencies (see below).
-   - Start the app: `streamlit run Core.py`
+   - Run the command on a Python terminal: `streamlit run Core.py`
 2. **Inputs**:
    - **Ticker**: Type a stock symbol (e.g., "AAPL" for Apple).
    - **Start Date**: Pick a date (default is Jan 1, 2020).

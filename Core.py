@@ -9,19 +9,20 @@ from statsmodels.stats.diagnostic import het_arch
 from statsmodels.stats.diagnostic import acorr_ljungbox
 import statsmodels.api as sm
 
-# Main title for Streamlit Site
+# The main title for Streamlit Site
 st.title("📈 Stock Volatility Forecasting Analysis Tool using GARCH")
 
-# Data fetching function from Yahoo Finance library
+# Data fetching function from Yahoo Finance library (YFinance)
 @st.cache_data
 def fetch_data(ticker, start_date):
+
     end_date = datetime.now()
 
     try:
         data = yf.download(ticker, start=start_date, end=end_date, auto_adjust=False, progress=False)
 
         if data.empty:
-            raise ValueError("No data returned.")
+            raise ValueError("No data returned for ticker {ticker}. Is it a valid symbol?")
 
         if 'Adj Close' not in data.columns:
             st.error("No data returned.")
@@ -34,12 +35,11 @@ def fetch_data(ticker, start_date):
         return None
 
 
-# Setting the default values for initial sidebar plot
-default_ticker = "AAPL"
-default_start_date = datetime(2020, 1, 1)
-price_data = fetch_data(default_ticker, default_start_date)
+# Setting the default values for initial sidebar plot - This is essentially stored in memory
+default_ticker = "TSLA"
+default_start_date = datetime(2022, 1, 1)
 
-# Sidebar: Input parameters for user [user interface]
+# Sidebar input parameters for user [user interface]
 st.sidebar.header("⚙️ Input Parameters")
 
 ticker = st.sidebar.text_input("Stock Ticker (e.g., AAPL)", default_ticker).upper()
@@ -48,7 +48,11 @@ startDate = st.sidebar.date_input("Start Date", default_start_date)
 
 forecastDays = st.sidebar.slider("Forecast Days", 1, 100, 10)
 
-# Sidebar: Historical price plot
+price_data = fetch_data(ticker=default_ticker, start_date=default_start_date)
+
+
+# Sidebar: Historical price plot WHY IS THIS NOT UPDATING - Side thought here, the main issue at hand seems to be an
+# inefficient flow of data. The sidebar plot is not picking up the updated values and the fix here would be solving that.
 if price_data is not None:
     price_values = price_data.to_numpy().flatten() if price_data.ndim > 1 else price_data.values
 
@@ -58,7 +62,7 @@ if price_data is not None:
         price_df,
         x='Date',
         y='Price',
-        title=f"Historical Price for {default_ticker}",
+        title=f"📈 Historical Price for {ticker}",
         color_discrete_sequence=['#1f77b4'],
         labels={'Price': 'Price (USD)', 'Date': 'Date'},
         template='plotly'
@@ -91,12 +95,13 @@ st.sidebar.subheader("Acknowledgements")
 
 st.sidebar.write("""
 - Project run by **Ubayd Knight** (Current Final Year Student at the University of Huddersfield)
-- Closer to finding the cure of cancer alone in order to obtain a job in 2025/2026
-- I'd like to thank Maven Securities for the confidence boost.
 """)
 
 # Update price_data with user input
 price_data = fetch_data(ticker, startDate)
+
+
+
 
 # Main panel: Volatility forecast and diagnostics
 if price_data is not None:
@@ -146,7 +151,9 @@ if price_data is not None:
         })
 
         print(f"hist_df shape: {hist_df.shape}, forecast_df shape: {forecast_df.shape}")
+
         vol_df = pd.concat([hist_df, forecast_df], ignore_index=True) #combine both
+
         print(f"vol_df shape: {vol_df.shape}, unique Types: {vol_df['Type'].unique()}")
 
         # Volatility plot
@@ -160,6 +167,7 @@ if price_data is not None:
             labels={'Volatility': 'Annualised Volatility (%)', 'Date': 'Date'},
             template='plotly_dark'
         )
+
 
         fig_vol.update_traces(
             line=dict(width=2),
@@ -178,7 +186,22 @@ if price_data is not None:
             yaxis=dict(range=[0, max(vol_df['Volatility'].max() * 1.1, 10)])
         )
 
+
+        fig_vol.update_xaxes(
+            rangeslider_visible=True,
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1, label="1m", step="month", stepmode="backward"),
+                    dict(count=6, label="6m", step="month", stepmode="backward"),
+                    dict(count=1, label="YTD", step="year", stepmode="todate"),
+                    dict(count=1, label="1y", step="year", stepmode="backward"),
+                    dict(step="all")
+                ])
+            )
+        )
+
         st.plotly_chart(fig_vol, use_container_width=True)
+
 
         # Model summary
         st.subheader("Model Summary")
@@ -193,7 +216,7 @@ if price_data is not None:
         std_resid = resid / garch_fit.conditional_volatility
 
         # ARCH-LM test
-        arch_lm_test = het_arch(std_resid, maxlag=10)
+        arch_lm_test = het_arch(std_resid, nlags=10)
         arch_lm_data = {
             "Metric": ["Test Statistic", "P-value", "Interpretation"],
             "Value": [
@@ -212,12 +235,12 @@ if price_data is not None:
 
         sign_bias_data = pd.DataFrame({
             'std_resid_sq': std_resid[1:] ** 2,
-            'neg_shock': neg_shock[:-1],
-            'pos_shock': pos_shock[:-1],
-            'const': 1
+            'Negative Shock': neg_shock[:-1],
+            'Positive Shock': pos_shock[:-1],
+            'Constant': 1
         }).dropna()
 
-        X = sign_bias_data[['const', 'neg_shock', 'pos_shock']]
+        X = sign_bias_data[['Constant', 'Negative Shock', 'Positive Shock']]
         y = sign_bias_data['std_resid_sq']
 
         sign_bias_model = sm.OLS(y, X).fit()
