@@ -268,7 +268,7 @@ if price_data is not None:
             ])
 
         else:
-            
+
             stability_data["Metric"].append("Result")
             stability_data["Value"].append("Unable to compute persistence.")
 
