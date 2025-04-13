@@ -36,7 +36,7 @@ def fetch_data(ticker, start_date):
 
 
 # Setting the default values for initial sidebar plot - This is essentially stored in memory
-default_ticker = "TSLA"
+default_ticker = "MSFT"
 default_start_date = datetime(2022, 1, 1)
 
 # Sidebar input parameters for user [user interface]
@@ -48,7 +48,7 @@ startDate = st.sidebar.date_input("Start Date", default_start_date)
 
 forecastDays = st.sidebar.slider("Forecast Days", 1, 100, 10)
 
-price_data = fetch_data(ticker=default_ticker, start_date=default_start_date)
+price_data = fetch_data(ticker, startDate)
 
 
 # Sidebar: Historical price plot WHY IS THIS NOT UPDATING - Side thought here, the main issue at hand seems to be an
@@ -95,12 +95,11 @@ st.sidebar.subheader("Acknowledgements")
 
 st.sidebar.write("""
 - Project run by **Ubayd Knight** (Current Final Year Student at the University of Huddersfield)
+- This website currently runs on **Streamlit** and utilises **pandas**, **numpy**, **yfinance**, **arch**, **plotly**, and **statsmodels** libraries for functionality..
 """)
 
 # Update price_data with user input
 price_data = fetch_data(ticker, startDate)
-
-
 
 
 # Main panel: Volatility forecast and diagnostics
