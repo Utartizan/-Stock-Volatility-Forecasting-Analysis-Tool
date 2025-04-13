@@ -225,7 +225,9 @@ if price_data is not None:
             ]
         }
 
-        st.write("Model Diagnostics are a set of statistical tests...")
+        st.write("**ARCH-LM Test for Residual ARCH Effects**")
+        st.write(
+            "The ARCH-LM Test examines whether the GARCH model has fully captured the volatility clustering in the stock's returns. A high test statistic or a low p-value indicates that there may still be patterns of volatility that the model hasn't accounted for, suggesting a need for model refinement.")
         st.table(pd.DataFrame(arch_lm_data))
 
         # Sign Bias test
@@ -252,11 +254,13 @@ if price_data is not None:
 
         st.subheader("**Sign Bias Test**")
 
-        st.write("The Sign Bias Test checks whether positive and negative stock returns...")
+        st.write("**Sign Bias Test for Asymmetric Volatility**")
+        st.write(
+            "The Sign Bias Test checks whether positive and negative stock return shocks have different impacts on future volatility. For example, a sharp price drop might cause more volatility than a similar-sized gain. Significant p-values for the negative or positive shock coefficients suggest the GARCH model may not fully capture these asymmetric effects.")
 
         st.table(sign_bias_results)
 
-        st.markdown("_Interpretation: Significant coefficients (p < 0.05)...")
+        st.markdown("**Interpretation**: If the p-values for the negative or positive shock coefficients are low (p < 0.05), it suggests that the GARCH model may not fully account for differences in how price drops versus gains affect future volatility, indicating a potential need for a model that handles asymmetry, like an EGARCH.")
 
         # Ljung-Box test
         lb_test = acorr_ljungbox(std_resid, lags=[10], return_df=True)
@@ -272,7 +276,9 @@ if price_data is not None:
 
         st.subheader("**Ljung-Box Test for Autocorrelation**")
 
-        st.write("What it means for stock volatility...")
+        st.write("**Ljung-Box Test for Residual Patterns**")
+        st.write(
+            "The Ljung-Box Test assesses whether the GARCH model's residuals (errors) show any lingering patterns over time, which could indicate that the model is missing key dynamics in the stock's returns. A low p-value suggests autocorrelation, meaning the model might need additional lags or adjustments to better fit the data.")
 
         st.table(pd.DataFrame(lb_data))
 
@@ -295,7 +301,9 @@ if price_data is not None:
             stability_data["Value"].append("Unable to compute persistence.")
 
         st.subheader("**GARCH Stability Check**")
-        st.write("The GARCH Stability Check evaluates...")
+        st.write("**GARCH Stability Check for Model Reliability**")
+        st.write(
+            "The GARCH Stability Check evaluates whether the model's volatility predictions are stable over time by examining the sum of its key parameters (α + β). A value less than 1 indicates a stationary model, meaning volatility shocks fade out, making the model reliable for forecasting. A value at or above 1 suggests instability, where volatility could grow indefinitely.")
         st.table(pd.DataFrame(stability_data))
 
         # Volatility metrics
@@ -308,8 +316,8 @@ if price_data is not None:
     except Exception as e:
         st.error(f"Error fitting GARCH model: {e}")
 
-else:
-    st.warning("Please enter a valid ticker to proceed.")
+    else:
+        st.warning("Please enter a valid ticker to proceed.")
 
 # Debugging for volatility plot
 print(hist_vol.min(), hist_vol.max())
