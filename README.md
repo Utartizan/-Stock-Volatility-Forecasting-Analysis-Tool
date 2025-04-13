@@ -49,3 +49,8 @@ You’ll need Python 3.8+ and the following packages. Install them with:
 
 ```bash
 pip install streamlit pandas numpy yfinance arch plotly statsmodels
+```
+
+## To-Do List
+1. Fix the GARCH model, ensure it displays on the chart as well as ensuring that the error on the bottom no longer persists.
+2. Buttons on the small stock plot are visible and makes the sidebar look clutter-y, fix that too.
