@@ -11,7 +11,6 @@ import statsmodels.api as sm
 # Title
 st.title("📈 Stock Volatility Forecasting with GARCH Models")
 
-
 # Data fetching function
 @st.cache_data
 def fetch_data(ticker, start_date):
