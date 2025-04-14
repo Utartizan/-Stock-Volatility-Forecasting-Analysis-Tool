@@ -141,7 +141,7 @@ if price_data is not None:
                 color='Type',
                 title=f"{model_type} Volatility Forecast for {ticker}",
                 color_discrete_map={'Historical': '#1f77b4', 'Forecast': '#ff7f0e'},
-                labels={'Volatility': 'Annualized Volatility (%)', 'Date': 'Date'},
+                labels={'Volatility': 'Annualised Volatility (%)', 'Date': 'Date'},
                 template='plotly_dark'
             )
             fig_vol.update_traces(line=dict(width=2), selector=dict(name='Historical'))
@@ -157,12 +157,12 @@ if price_data is not None:
             with st.expander("About GARCH Models"):
                 st.write("""
                             - **GARCH**: Models symmetric volatility clustering.
-                            - **TGARCH**: Emphasizes threshold effects for negative shocks.
+                            - **TGARCH**: Emphasises threshold effects for negative shocks.
                             """)
 
             # Volatility metrics
             st.subheader("Volatility Metrics")
-            st.metric("Latest Historical Volatility - (stock’s recent price volatility based on the past 52 days)", f"{hist_vol.iloc[-1]:.2f}%")
+            st.metric("Latest Historical Volatility - (Stock’s recent price volatility based on the most previous day)", f"{hist_vol.iloc[-1]:.2f}%")
             st.metric(f"Day 1 Forecast Volatility - (Volatility predicted for the next trading day)", f"{forecast_vol[0]:.2f}%")
 
 
@@ -236,9 +236,6 @@ if price_data is not None:
                 "Metric": ["Persistence", "Result"],
                 "Value": [str(persistence), stability]
             })
-
-
-
 
 
         except Exception as e:
