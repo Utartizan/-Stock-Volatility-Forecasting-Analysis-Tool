@@ -1,7 +1,7 @@
 [theme]
-base = "dark"  # Start with Streamlit’s dark theme
-primaryColor = "#1f77b4"  # Blue for widgets (matches your plot’s historical line)
-backgroundColor = "#0e1117"  # Dark background for main area
-secondaryBackgroundColor = "#262730"  # Slightly lighter for sidebar
-textColor = "#fafafa"  # Light text for readability
-font = "sans serif"  # Keep default font
+base = "dark"
+primaryColor = "#2ca02c" 
+backgroundColor = "#1a1c22"
+secondaryBackgroundColor = "#2d3038"
+textColor = "#ffffff"
+font = "sans serif"
