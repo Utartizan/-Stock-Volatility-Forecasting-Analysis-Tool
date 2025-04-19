@@ -8,10 +8,9 @@ from datetime import datetime, timedelta
 from statsmodels.stats.diagnostic import het_arch, acorr_ljungbox
 import statsmodels.api as sm
 
-# Title
+st.set_page_config(layout="wide")
 st.title("📈 Stock Volatility Forecasting with GARCH Models")
 
-# Data fetching function
 @st.cache_data
 def fetch_data(ticker, start_date):
     end_date = datetime.now()
@@ -29,17 +28,14 @@ def fetch_data(ticker, start_date):
         return None
 
 
-# Sidebar inputs
 st.sidebar.header("⚙️ Input Parameters")
 ticker = st.sidebar.text_input("Stock Ticker (e.g., AAPL)", "MSFT").upper()
 start_date = st.sidebar.date_input("Start Date", datetime(2024, 1, 1))
 forecast_days = st.sidebar.slider("Forecast Days", 1, 30, 10)
 model_type = st.sidebar.selectbox("GARCH Model Type", ["GARCH", "TGARCH"])
 
-# Fetch data
 price_data = fetch_data(ticker, start_date)
 
-# Sidebar: Historical price plot
 if price_data is not None:
     price_values = price_data.values.flatten() if price_data.values.ndim > 1 else price_data.values
     price_df = pd.DataFrame({'Date': price_data.index, 'Price': price_values})
@@ -60,7 +56,6 @@ if price_data is not None:
     )
     st.sidebar.plotly_chart(fig_price, use_container_width=True)
 
-# Sidebar: Instructions and info
 st.sidebar.subheader("Instructions")
 st.sidebar.write("""
 - Enter a stock ticker (e.g., 'AAPL').
@@ -74,38 +69,31 @@ st.sidebar.write("""
 - Powered by **Streamlit**, **yfinance**, **arch**, **plotly**, and **statsmodels**.
 """)
 
-# Main panel: Volatility analysis
 if price_data is not None:
-    # Calculate returns
     returns = 100 * np.log(price_data / price_data.shift(1)).dropna()
     returns_values = returns.values
 
-    # Check data sufficiency
     if len(returns_values) < 100:
         st.warning("Data too short (<100 points). Try a longer date range for stable model fitting.")
     elif np.std(returns_values) < 1e-6:
         st.warning("Returns have near-zero variance. Try a different ticker or period.")
     else:
-        # Historical volatility
         hist_vol = returns.rolling(window=21).std() * np.sqrt(252)
         hist_vol = hist_vol.dropna()
 
         try:
-            # Configure GARCH model
             if model_type == "TGARCH":
                 model = arch_model(returns_values, vol="GARCH", p=1, o=1, q=1, power=1.0, dist="Normal", rescale=True,
                                    mean="zero")
-            else:  # GARCH
+            else:
                 model = arch_model(returns_values, vol="Garch", p=1, q=1, dist="Normal", rescale=True, mean="zero")
 
-            # Fit model
             try:
                 garch_fit = model.fit(disp='off', options={'maxiter': 100, 'ftol': 1e-6})
             except Exception as fit_error:
                 st.error(f"Model fitting failed: {fit_error}. Try a different ticker or date range.")
                 st.stop()
 
-            # Forecast volatility
             if model_type == "TGARCH":
                 forecast_horizon = 1
                 st.info("Note: TGARCH supports only 1-day forecasts due to model complexity.")
@@ -116,11 +104,9 @@ if price_data is not None:
             forecast_variance = forecast.variance.iloc[-1].values
             forecast_vol = np.sqrt(forecast_variance) * np.sqrt(252)
 
-            # Create forecast dates
             last_date = returns.index[-1]
             forecast_dates = pd.date_range(start=last_date + timedelta(days=1), periods=forecast_horizon, freq='B')
 
-            # Combine historical and forecast volatility
             hist_df = pd.DataFrame({
                 'Date': hist_vol.index,
                 'Volatility': hist_vol.values,
@@ -133,7 +119,6 @@ if price_data is not None:
             })
             vol_df = pd.concat([hist_df, forecast_df], ignore_index=True)
 
-            # Volatility plot
             fig_vol = px.line(
                 vol_df,
                 x='Date',
@@ -153,22 +138,18 @@ if price_data is not None:
             )
             st.plotly_chart(fig_vol, use_container_width=True)
 
-            # Model info
             with st.expander("About GARCH Models"):
                 st.write("""
                             - **GARCH**: Models symmetric volatility clustering.
                             - **TGARCH**: Emphasises threshold effects for negative shocks.
                             """)
 
-            # Volatility metrics
             st.subheader("Volatility Metrics")
             st.metric("Latest Historical Volatility - (Stock’s recent price volatility based on the most previous day)", f"{hist_vol.iloc[-1]:.2f}%")
             st.metric(f"Day 1 Forecast Volatility - (Volatility predicted for the next trading day)", f"{forecast_vol[0]:.2f}%")
 
-
-            # Model summary as table
             st.subheader("Model Summary")
-            # Change: Display summary as a clean DataFrame table like diagnostics
+
             summary_df = pd.DataFrame({
                 "Parameter": garch_fit.params.index,
                 "Value": [f"{x:.4f}" for x in garch_fit.params.values],
@@ -178,12 +159,10 @@ if price_data is not None:
             st.write("Model parameters and significance:")
             st.table(summary_df)
 
-            # Diagnostics
             st.subheader("Model Diagnostics")
             resid = garch_fit.resid
             std_resid = resid / garch_fit.conditional_volatility
 
-            # ARCH-LM Test
             arch_lm_test = het_arch(std_resid, nlags=10)
             st.write("**ARCH-LM Test**")
             st.write(
@@ -193,7 +172,6 @@ if price_data is not None:
                 "Value": [f"{arch_lm_test[0]:.4f}", f"{arch_lm_test[1]:.4f}"]
             })
 
-            # Sign Bias Test
             neg_shock = (std_resid < 0).astype(int)
             pos_shock = (std_resid > 0).astype(int)
             sign_bias_data = pd.DataFrame({
@@ -213,7 +191,6 @@ if price_data is not None:
                 "P-value": sign_bias_model.pvalues.round(4)
             }))
 
-            # Ljung-Box Test
             lb_test = acorr_ljungbox(std_resid, lags=[10], return_df=True)
             st.write("**Ljung-Box Test**")
             st.write("Checks for residual autocorrelation. Low p-value (<0.05) suggests model misses patterns.")
@@ -222,7 +199,6 @@ if price_data is not None:
                 "Value": [f"{lb_test['lb_stat'].iloc[0]:.4f}", f"{lb_test['lb_pvalue'].iloc[0]:.4f}"]
             })
 
-            # Stability Check
             params = garch_fit.params
             persistence = params.get('alpha[1]', 0) + params.get('beta[1]', 0)
             if model_type == "TGARCH":
