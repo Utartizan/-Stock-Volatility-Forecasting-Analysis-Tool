@@ -1,11 +1,19 @@
 # Stock Volatility Forecasting Tool
+
+### Skip all the nonsense: https://utartizanforecast.streamlit.app
+
+##
+
 ![image](https://i.ibb.co/qLW8VCVN/u-1126137439-3929098091-fm-253-app-138-f-JPEG-1.jpg)
 
-This is a Streamlit app that forecasts stock volatility using a GARCH(1, 1) model. It pulls historical stock data from Yahoo Finance, calculates historical volatility, predicts future volatility, and runs diagnostic tests to check the model’s reliability. You’ll get a plot with historical (blue) and forecasted (red dashed) volatility, plus some key metrics and test results.
+So lately after a couple more rejections I decided to fuel my skillsets and therefore continued on my journey to self-improvement.
 
-## What It Does
+The first result of such is this Streamlit app that I forged with Python, which inclueds the usage of several finance/graphical libraries that forecasts stock volatility using a simple GARCH(1, 1) model, as well as a TGARCH model (although not fully complete). 
 
-- **Data Input**: Enter a stock ticker (e.g., "AAPL"), pick a start date, and set a forecast horizon (up to 100 days).
+It pulls historical stock data from Yahoo Finance over a 10-year timeline, calculates historical volatility, predicts future volatility, and runs diagnostic tests to check the model’s reliability. You’ll get a plot with historical (blue) and forecasted (orange dashed) volatility, plus some key metrics and test results.
+
+## What it Includes:
+
 - **Volatility Plot**: Shows historical volatility (21-day rolling, annualised) and GARCH-forecasted volatility.
 - **Stock Plot**: Displays a mini stock plot for the users selected stock ticker on the sidebar.
 - **Diagnostics**: Runs four tests to see if the GARCH model fits the stock’s volatility well:
@@ -27,8 +35,7 @@ This is a Streamlit app that forecasts stock volatility using a GARCH(1, 1) mode
    - Scroll down for the model summary, diagnostic tests, and volatility metrics.
 4. **Enjoy.**
 
-### OR 
-
+### OR (if you don't trust links...)
 
 1. **Run the App**:
    - Clone this repo: `git clone <https://github.com/Utartizan/Stock-Volatility-Forecasting-Analysis-Tool/blob/main/README.md>`
@@ -58,11 +65,3 @@ pip install streamlit pandas numpy yfinance arch plotly statsmodels
 - **Statistical Modelling**: Arch and Statsmodels
 - **Visualisation**: Plotly
 - **Dev Tools**: Terminal/Shell and Python Env
-
-
-## To-Do List
-1. Fix the GARCH model, ensure it displays on the chart as well as ensuring that the error on the bottom no longer persists. [Done]
-2. Buttons on the small stock plot are visible and makes the sidebar look clutter-y, fix that too. [Done]
-3. Include multiple GARCH variants (such as EGARCH and TGARCH) for further options, allow users to specify model parameters. [Partially Done, only TGARCH]
-4. Improve the results and interpretations section. Not a lot of people can be well versed in this sort of stuff. In simple terms what do the following results mean? [Done]
-5. Performance metrics? Perhaps include backtest features to compare the forecasts to RMSE, MAE, etc.
