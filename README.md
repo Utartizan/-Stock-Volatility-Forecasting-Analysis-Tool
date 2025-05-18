@@ -8,7 +8,7 @@
 
 So lately after a couple more rejections I decided to fuel my skillsets and therefore continued on my journey to self-improvement.
 
-The first result of such is this Streamlit app that I forged with Python, which inclueds the usage of several finance/graphical libraries that forecasts stock volatility using a simple GARCH(1, 1) model, as well as a TGARCH model (although not fully complete). 
+The first result of such is this Streamlit app that I forged with Python, which includes the usage of several finance/graphical libraries that forecasts stock volatility using a simple GARCH(1, 1) model, as well as a TGARCH model (although not fully complete). 
 
 It pulls historical stock data from Yahoo Finance over a 10-year timeline, calculates historical volatility, predicts future volatility, and runs diagnostic tests to check the model’s reliability. You’ll get a plot with historical (blue) and forecasted (orange dashed) volatility, plus some key metrics and test results.
 
